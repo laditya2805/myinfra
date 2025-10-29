@@ -33,14 +33,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      
+      - name: Install linting tools
+        run: npm ci
 
-      - name: Run Lint
-        working-directory: lambda
-        run: npx eslint . --ext .ts
+      - name: Run ESLint
+        run: npm run lint
 
-      - name: Run Prettier
-        working-directory: lambda
-        run: npx prettier --check .
+      - name: Run Prettier check
+        run: npm run format
+
 
 
   deploy:

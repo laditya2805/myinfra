@@ -3,24 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "dist": "npm run build && zip -r dist.zip dist",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
-    "license:check": "license-eye header check",
-    "license:add": "license-eye header fix"
+    "format": "prettier --check ."
   },
   "devDependencies": {
-    "typescript": "^5.7.2",
-    "eslint": "^9.15.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "prettier": "^3.3.3",
-    "license-eye": "^1.8.0"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.679.0",
-    "@aws-sdk/s3-request-presigner": "^3.679.0"
+    "eslint": "^9.38.0",
+    "@eslint/js": "^9.38.0",
+    "prettier": "^3.3.3"
   }
 }
