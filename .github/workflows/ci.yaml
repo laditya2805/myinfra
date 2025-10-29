@@ -36,11 +36,11 @@ jobs:
 
       - name: Run Lint
         working-directory: lambda
-        run: npm run lint
+        run: npx run lint
 
       - name: Run Prettier
         working-directory: lambda
-        run: npm run format
+        run: npx prettier --check .
 
 
   deploy:
