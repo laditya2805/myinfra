@@ -36,7 +36,7 @@ jobs:
 
       - name: Run Lint
         working-directory: lambda
-        run: npx run lint
+        run: npx eslint . --ext .ts
 
       - name: Run Prettier
         working-directory: lambda
