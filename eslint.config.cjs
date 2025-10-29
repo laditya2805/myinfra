@@ -4,6 +4,7 @@ module.exports = [
   js.configs.recommended,
   {
     files: ["**/*.ts"],
+    ignores: ["dist/**", "node_modules/**"],
     languageOptions: {
       parserOptions: {
         ecmaVersion: "latest",
@@ -11,7 +12,7 @@ module.exports = [
       },
     },
     rules: {
-      "no-unused-vars": "warn",
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^(event|context)$" }],
       "no-console": "off",
     },
   },
