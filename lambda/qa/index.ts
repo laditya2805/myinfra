@@ -14,7 +14,7 @@ const EXPIRES_SECONDS = 7 * 24 * 60 * 60;
 // Example: if you currently keep sprints 2..5, set sprintStart=2.
 const sprintStart = 2;
 
-export const handler = async (_event, _context) => {
+export const handler = async (event, context) => {
   // Collect all objects (handle pagination)
   const objects = [];
   let ContinuationToken;
