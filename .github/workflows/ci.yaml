@@ -1,0 +1,80 @@
+name: Lambda CI & Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Select environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  ci-checks:
+    name: Run Prettier, ESLint, License
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: lambda
+        run: npm ci
+
+      - name: Run Lint
+        working-directory: lambda
+        run: npm run lint
+
+      - name: Run Prettier
+        working-directory: lambda
+        run: npm run format
+
+
+  deploy:
+    name: Deploy to AWS Lambda
+    needs: ci-checks
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: lambda
+        run: npm ci && npm run build
+
+      - name: Deploy to Lambda
+        working-directory: lambda
+        run: |
+          ENV=${{ github.event.inputs.env }}
+          if [ "$ENV" = "dev" ]; then
+            aws lambda update-function-code \
+              --function-name emerald-on-prem-dev \
+              --zip-file fileb://dist/dev/index.zip
+          else
+            aws lambda update-function-code \
+              --function-name emerald-on-prem-qa \
+              --zip-file fileb://dist/qa/index.zip
+          fi
