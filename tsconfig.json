@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
+    "module": "CommonJS",
     "lib": ["ES2020"],
     "moduleResolution": "node",
     "outDir": "dist",
     "rootDir": "lambda",
     "esModuleInterop": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "outExtension": {".js": ".mjs"}
+    "strict": false,
+    "skipLibCheck": true
   },
   "include": ["lambda/**/*.ts"]
 }
