@@ -7,7 +7,7 @@
 },
 
   "scripts": {
-    "build": "tsc lambda/dev/index.ts --outDir dist/dev && tsc lambda/qa/index.ts --outDir dist/qa",
+    "build": "tsc",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
