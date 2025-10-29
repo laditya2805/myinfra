@@ -80,15 +80,14 @@ jobs:
           aws-region: ap-south-1  
 
       - name: Deploy to Lambda
-        working-directory: lambda
         run: |
-          ENV=${{ github.event.inputs.env }}
-          if [ "$ENV" = "dev" ]; then
-            aws lambda update-function-code \
-              --function-name emerald-on-prem-dev \
-              --zip-file fileb://dist/dev/index.zip
-          else
-            aws lambda update-function-code \
-              --function-name emerald-on-prem-qa \
-              --zip-file fileb://dist/qa/index.zip
-          fi
+         ENV=${{ github.event.inputs.env }}
+         if [ "$ENV" = "dev" ]; then
+          aws lambda update-function-code \
+          --function-name mynodedev \
+          --zip-file fileb://dist/dev.zip
+         else
+          aws lambda update-function-code \
+          --function-name mynodes3bucket \
+          --zip-file fileb://dist/qa.zip
+         fi
