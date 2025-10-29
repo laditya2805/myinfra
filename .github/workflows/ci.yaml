@@ -34,10 +34,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        working-directory: lambda
-        run: npm ci
-
       - name: Run Lint
         working-directory: lambda
         run: npm run lint
