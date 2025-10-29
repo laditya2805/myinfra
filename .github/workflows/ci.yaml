@@ -59,6 +59,19 @@ jobs:
         with:
           node-version: 20
 
+      - name: Zip Lambda function
+        run: |
+          ENV=${{ github.event.inputs.env }}
+          mkdir -p dist
+          if [ "$ENV" = "dev" ]; then
+            cd lambda/dev
+            zip -r ../../dist/dev.zip .
+          else
+            cd lambda/qa
+            zip -r ../../dist/qa.zip .
+          fi
+          cd ../..
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
