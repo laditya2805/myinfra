@@ -43,7 +43,7 @@ export const handler = async (event, context) => {
   }
 
   // Sort newest first
-  files.sort((a, b) => new Date(b.LastModified) - new Date(a.LastModified));
+  files.sort((a, b) => new Date(b.LastModified).getTime() - new Date(a.LastModified).getTime());
 
   // Map to sprint labels: oldest gets sprintStart, then increment
   const oldestFirst = [...files].reverse();

@@ -40,7 +40,7 @@ export const handler = async (event, context) => {
   }
 
   // Newest first
-  versions.sort((a, b) => new Date(b.LastModified) - new Date(a.LastModified));
+  versions.sort((a, b) => new Date(b.LastModified).getTime() - new Date(a.LastModified).getTime());
 
   // Compute the single globally latest version across all keys
   const globalLatest = versions[0];
