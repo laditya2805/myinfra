@@ -4,3 +4,10 @@
   "tabWidth": 2,
   "trailingComma": "es5"
 }
+{
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "tabWidth": 2
+}
