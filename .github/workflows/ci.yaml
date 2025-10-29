@@ -49,7 +49,7 @@ jobs:
     name: Deploy to AWS Lambda
     needs: ci-checks
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -59,16 +59,25 @@ jobs:
         with:
           node-version: 20
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
       - name: Deploy to Lambda
-        working-directory: lambda
         run: |
-          ENV=${{ github.event.inputs.env }}
+          ENV=${{ github.event.inputs.env || 'dev' }}
           if [ "$ENV" = "dev" ]; then
+            cd lambda/dev
+            zip -r function.zip .
             aws lambda update-function-code \
-              --function-name emerald-on-prem-dev \
-              --zip-file fileb://dist/dev/index.zip
+              --function-name mynodedev \
+              --zip-file fileb://function.zip
           else
+            cd lambda/qa
+            zip -r function.zip .
             aws lambda update-function-code \
-              --function-name emerald-on-prem-qa \
-              --zip-file fileb://dist/qa/index.zip
+              --function-name mynodes3bucket \
+              --zip-file fileb://function.zip
           fi
