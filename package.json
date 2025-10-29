@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "format": "prettier --check ."
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "eslint": "^9.38.0",
