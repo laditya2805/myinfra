@@ -9,7 +9,7 @@ const s3 = new S3Client({});
 const BUCKET = "dev-aditya-280595";   // change if needed
 const PREFIX = "";                     // e.g., "folder/"
 
-export const handler = async (event, context) => {
+export const handler = async (_event, _context) => {
   // Get all versions (handle pagination)
   const versions = [];
   let KeyMarker;
