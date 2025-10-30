@@ -32,9 +32,9 @@ jobs:
       - name: Deploy Lambda Infrastructure using CloudFormation
         run: |
           ENV=${{ github.event.inputs.environment }}
-          STACK_NAME="lambda-infra-${ENV}"
+          STACK_NAME="mycft-${ENV}"
           aws cloudformation deploy \
-            --template-file lambda_infra.yaml \
+            --template-file cft.yaml \
             --stack-name $STACK_NAME \
             --parameter-overrides Environment=$ENV \
             --capabilities CAPABILITY_NAMED_IAM
@@ -42,9 +42,10 @@ jobs:
       - name: Get Lambda Function URL
         run: |
           ENV=${{ github.event.inputs.environment }}
-          STACK_NAME="lambda-infra-${ENV}"
+          STACK_NAME="mycft-${ENV}"
           aws cloudformation describe-stacks \
             --stack-name $STACK_NAME \
             --query "Stacks[0].Outputs" \
             --output table
+
  
