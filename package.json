@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint lambda --ext .ts",
-    "format": "prettier --write ."
+    "lint": "eslint lambda infra --ext .ts",
+    "format": "prettier --write .",
+    "cdk": "cdk",
+    "cdk:synth": "cdk synth",
+    "cdk:deploy": "cdk deploy"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.0.0",
@@ -15,6 +18,9 @@
     "@types/aws-lambda": "^8.10.0",
     "eslint": "^9.38.0",
     "@eslint/js": "^9.38.0",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "aws-cdk-lib": "^2.139.0",
+    "constructs": "^10.3.0",
+    "aws-cdk": "^2.139.0"
   }
 }
