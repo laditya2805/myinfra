@@ -1,74 +1,54 @@
-import * as cdk from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as iam from 'aws-cdk-lib/aws-iam';
-import * as path from 'path';
-import { Construct } from 'constructs';
+import * as cdk from "aws-cdk-lib";
+import { Construct } from "constructs";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as iam from "aws-cdk-lib/aws-iam";
 
-interface LambdaStackProps extends cdk.StackProps {
-  environment: 'dev' | 'qa';
-  lambdaRuntime?: string;
-  lambdaHandler?: string;
+interface LambdaInfraStackProps extends cdk.StackProps {
+  environment: string;
 }
 
-export class LambdaFunctionUrlStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: LambdaStackProps) {
+export class LambdaInfraStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props: LambdaInfraStackProps) {
     super(scope, id, props);
 
-    const { environment, lambdaRuntime = 'nodejs22.x', lambdaHandler = 'index.handler' } = props;
-
-    const lambdaExecutionRole = new iam.Role(this, 'LambdaExecutionRole', {
-      roleName: `lambda-exec-role-${environment}-${this.stackName}`,
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+    const { environment } = props;
+    
+    const role = new iam.Role(this, "LambdaExecutionRole", {
+      assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
       managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName(
+          "service-role/AWSLambdaBasicExecutionRole"
+        ),
       ],
     });
 
-    lambdaExecutionRole.addToPolicy(
+    role.addToPolicy(
       new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ['s3:GetObject', 's3:ListBucket'],
-        resources: ['*'],
+        actions: ["s3:GetObject", "s3:ListBucket"],
+        resources: ["*"],
       })
     );
 
-    const lambdaCodePath = path.join(__dirname, '../../dist/lambda', environment);
-
-    // Fix: Use runtime name directly
-    const myLambdaFunction = new lambda.Function(this, 'MyLambdaFunction', {
+    const lambdaFn = new lambda.Function(this, "MyLambdaFunction", {
       functionName: `Emerald-on-prem-presign-${environment}`,
-      runtime: lambda.Runtime.NODEJS_22_X,  // Changed this line
-      handler: lambdaHandler,
-      role: lambdaExecutionRole,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      handler: "index.handler",
+      code: lambda.Code.fromInline(`
+        exports.handler = async () => {
+          return { statusCode: 200, body: "Hello from ${environment}!" };
+        };
+      `),
+
+      role: role,
       timeout: cdk.Duration.seconds(30),
       memorySize: 512,
-      code: lambda.Code.fromAsset(lambdaCodePath),
     });
 
-    const functionUrl = myLambdaFunction.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-    });
-
-    myLambdaFunction.addPermission('LambdaPermissionInvokeFunctionUrl', {
-      principal: new iam.AnyPrincipal(),
-      action: 'lambda:InvokeFunctionUrl',
-      functionUrlAuthType: lambda.FunctionUrlAuthType.NONE,
-    });
-
-    myLambdaFunction.addPermission('LambdaPermissionInvokeFunction', {
-      principal: new iam.AnyPrincipal(),
-      action: 'lambda:InvokeFunction',
-      invokedViaFunctionUrl: true,
-    });
-
-    new cdk.CfnOutput(this, 'FunctionName', {
-      value: myLambdaFunction.functionName,
-      description: 'Lambda Function Name',
-    });
-
-    new cdk.CfnOutput(this, 'FunctionUrl', {
-      value: functionUrl.url,
-      description: 'Public Function URL for this Lambda',
+    new lambda.CfnUrl(this, "LambdaFunctionUrl", {
+      authType: "NONE",
+      targetFunctionArn: lambdaFn.functionArn,
     });
   }
+
 }
+ 
