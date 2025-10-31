@@ -5,10 +5,9 @@
     "lib": ["ES2020"],
     "moduleResolution": "node",
     "outDir": "dist",
-    "rootDir": "lambda",
     "esModuleInterop": true,
     "strict": false,
     "skipLibCheck": true
   },
-  "include": ["lambda/**/*.ts"]
+  "include": ["lambda/**/*.ts", "infra/**/*.ts"]
 }
