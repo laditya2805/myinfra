@@ -42,8 +42,9 @@ jobs:
       - name: Get Lambda Function URL
         run: |
           ENV=${{ github.event.inputs.environment }}
-          STACK_NAME="mycft-${ENV}"
+          STACK_NAME="emerald-on-prem-stack-${ENV}"
           aws cloudformation describe-stacks \
             --stack-name $STACK_NAME \
             --query "Stacks[0].Outputs" \
             --output table
+
