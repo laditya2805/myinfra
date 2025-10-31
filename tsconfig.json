@@ -7,9 +7,7 @@
     "outDir": "dist",
     "esModuleInterop": true,
     "strict": false,
-    "skipLibCheck": true,
-    "declaration": true,
-    "types": ["node"]
+    "skipLibCheck": true
   },
   "include": ["lambda/**/*.ts", "infra/**/*.ts"]
 }
