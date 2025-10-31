@@ -1,14 +1,9 @@
-import * as cdk from 'aws-cdk-lib';
-import { LambdaFunctionUrlStack } from '../lib/lambda-stack';
-
+#!/usr/bin/env node
+import * as cdk from "aws-cdk-lib";
+import { LambdaInfraStack } from "../lib/lambda-infra-stack";
 const app = new cdk.App();
-
-const environment = app.node.tryGetContext('environment') || 'dev';
-
-new LambdaFunctionUrlStack(app, `LambdaFunctionUrlStack-${environment}`, {
-  environment: environment as 'dev' | 'qa',
-  lambdaRuntime: 'nodejs22.x',
-  lambdaHandler: 'index.handler',
+const envParam = app.node.tryGetContext("env") || "dev";
+new LambdaInfraStack(app, `EmeraldOnPremStack-${envParam}`, {
+ env: { region: "ap-south-1" },
+ environment: envParam,
 });
-
-app.synth();
