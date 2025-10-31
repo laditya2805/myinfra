@@ -1,12 +1,13 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Creates a Lambda function (dev/qa/prod) with IAM role and Function URL"
+Description: "Creates a Lambda function (dev/qa) with IAM role and Function URL"
+
 Parameters:
   Environment:
     Type: String
     AllowedValues:
       - dev
       - qa
-    Description: "Environment name for Lambda (dev | qa | prod)"
+    Description: "Environment name for Lambda (dev | qa )"
   
   LambdaRuntime:
     Type: String
@@ -46,7 +47,7 @@ Resources:
   MyLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AWS::StackName}-${Environment}-presign"
+      FunctionName: !Sub "Emerald-on-prem-presign-${Environment}"
       Runtime: !Ref LambdaRuntime
       Handler: !Ref LambdaHandler
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -57,7 +58,7 @@ Resources:
           exports.handler = async () => {
             return {
               statusCode: 200,
-              body: "Hello from ${Environment} Lambda!"
+              body: "Hello from Lambda!"
             };
           };
 
@@ -67,13 +68,23 @@ Resources:
       AuthType: NONE
       TargetFunctionArn: !GetAtt MyLambdaFunction.Arn
 
-  LambdaPermission:
+  # Permission 1: InvokeFunctionUrl with FunctionUrlAuthType condition
+  LambdaPermissionInvokeFunctionUrl:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref MyLambdaFunction
       Action: lambda:InvokeFunctionUrl
       Principal: "*"
       FunctionUrlAuthType: NONE
+
+  # Permission 2: InvokeFunction with InvokedViaFunctionUrl condition
+  LambdaPermissionInvokeFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref MyLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: "*"
+      InvokedViaFunctionUrl: true
 
 Outputs:
   FunctionName:
@@ -82,4 +93,3 @@ Outputs:
   FunctionUrl:
     Value: !GetAtt LambdaFunctionUrl.FunctionUrl
     Description: "Public Function URL for this Lambda"
- 
