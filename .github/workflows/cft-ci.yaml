@@ -32,7 +32,7 @@ jobs:
       - name: Deploy Lambda Infrastructure using CloudFormation
         run: |
           ENV=${{ github.event.inputs.environment }}
-          STACK_NAME="mycft-${ENV}"
+          STACK_NAME="emerald-on-prem-stack-${ENV}"
           aws cloudformation deploy \
             --template-file cft.yaml \
             --stack-name $STACK_NAME \
@@ -47,5 +47,3 @@ jobs:
             --stack-name $STACK_NAME \
             --query "Stacks[0].Outputs" \
             --output table
-
- 
