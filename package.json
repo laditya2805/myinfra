@@ -1,26 +1,21 @@
 {
-  "name": "emerald-lambda",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "tsc",
-    "lint": "eslint lambda infra --ext .ts",
-    "format": "prettier --write .",
-    "cdk": "cdk",
-    "cdk:synth": "cdk synth",
-    "cdk:deploy": "cdk deploy"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.0.0",
-    "@aws-sdk/s3-request-presigner": "^3.0.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.3",
-    "@types/aws-lambda": "^8.10.0",
-    "eslint": "^9.38.0",
-    "@eslint/js": "^9.38.0",
-    "prettier": "^3.3.3",
-    "aws-cdk-lib": "^2.139.0",
-    "constructs": "^10.3.0",
-    "aws-cdk": "^2.139.0"
-  }
+ "name": "emerald-lambda",
+ "version": "1.0.0",
+ "scripts": {
+   "build": "tsc",
+   "format": "prettier --check .",
+   "lint": "eslint .",
+   "cdk": "cdk"
+ },
+ "dependencies": {
+   "@aws-sdk/client-s3": "^3.609.0",
+   "@aws-sdk/s3-request-presigner": "^3.609.0"
+ },
+ "devDependencies": {
+   "aws-cdk-lib": "^2.160.0",
+   "constructs": "^10.3.0",
+   "typescript": "^5.3.3",
+   "eslint": "^9.0.0",
+   "prettier": "^3.1.0"
+ }
 }
