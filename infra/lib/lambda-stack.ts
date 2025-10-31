@@ -34,12 +34,10 @@ export class LambdaFunctionUrlStack extends cdk.Stack {
 
     const lambdaCodePath = path.join(__dirname, '../../dist/lambda', environment);
 
+    // Fix: Use runtime name directly
     const myLambdaFunction = new lambda.Function(this, 'MyLambdaFunction', {
       functionName: `Emerald-on-prem-presign-${environment}`,
-      runtime: lambda.Runtime.of({
-        name: lambdaRuntime,
-        supportsInlineCode: false,
-      }),
+      runtime: lambda.Runtime.NODEJS_22_X,  // Changed this line
       handler: lambdaHandler,
       role: lambdaExecutionRole,
       timeout: cdk.Duration.seconds(30),
