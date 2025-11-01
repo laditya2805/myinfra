@@ -17,6 +17,7 @@
   },
 "devDependencies": {
   "aws-cdk": "^2.160.0",
+  "ts-node": "^10.9.0",
   "eslint": "^8.57.0",
   "@eslint/js": "^8.57.0",
   "@typescript-eslint/parser": "^7.18.0",
