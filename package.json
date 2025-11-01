@@ -3,7 +3,7 @@
   "version": "1.0.0",
  "scripts": {
   "build": "tsc",
-  "lint": "eslint --ext .ts . --ignore-path .eslintignore",
+  "lint": "eslint lambda/**/*.ts",
   "format": "prettier --check ."
 },
   "dependencies": {
