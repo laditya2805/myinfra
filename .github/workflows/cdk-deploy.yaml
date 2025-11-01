@@ -66,5 +66,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
+      - name: Bootstrap CDK (if needed)
+        run: npm run cdk:bootstrap
+
       - name: Deploy CDK Stack
         run: npm run cdk:deploy -- --context environment=${{ github.event.inputs.environment }} --require-approval never
