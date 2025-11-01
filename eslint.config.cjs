@@ -12,20 +12,21 @@ module.exports = [
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
-        project: "./tsconfig.json",
+      },
+      globals: {
+        require: "readonly",
+        exports: "readonly",
+        process: "readonly",
+        console: "readonly",
       },
     },
     plugins: {
       "@typescript-eslint": tsPlugin,
     },
     rules: {
-      ...tsPlugin.configs.recommended.rules, // add recommended TS rules
-      "no-unused-vars": "off", // disable base rule
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^(event|context)$" },
-      ],
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^(event|context)$" }],
       "no-console": "off",
+      "@typescript-eslint/no-unused-vars": "off"
     },
   },
 ];
