@@ -1,7 +1,7 @@
-import js from "@eslint/js";
-import tseslint from "typescript-eslint";
+const js = require("@eslint/js");
+const tseslint = require("typescript-eslint");
 
-export default tseslint.config(
+module.exports = tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -15,7 +15,7 @@ export default tseslint.config(
     },
     ignores: ["dist/**"],
     rules: {
-      "no-undef": "off", // disable this rule because Node defines things like `require`, `exports`
+      "no-undef": "off",
     },
   }
 );
