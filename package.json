@@ -1,11 +1,11 @@
 {
   "name": "emerald-lambda",
   "version": "1.0.0",
-  "scripts": {
-    "build": "tsc",
-    "lint": "eslint .",
-    "format": "prettier --check ."
-  },
+ "scripts": {
+  "build": "tsc",
+  "lint": "eslint --ext .ts . --ignore-path .eslintignore",
+  "format": "prettier --check ."
+},
   "dependencies": {
     "@aws-sdk/client-s3": "^3.650.0",
     "@aws-sdk/s3-request-presigner": "^3.650.0",
