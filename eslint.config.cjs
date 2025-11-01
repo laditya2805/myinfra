@@ -1,21 +1,31 @@
 const js = require("@eslint/js");
-const tseslint = require("typescript-eslint");
 
-module.exports = tseslint.config(
+module.exports = [
   js.configs.recommended,
-  ...tseslint.configs.recommended,
   {
+    files: ["**/*.ts"],
+    ignores: ["dist/**", "node_modules/**"],
     languageOptions: {
-      globals: {
-        ...tseslint.configs.recommended.languageOptions.globals,
-        node: true,
+      parser: require("@typescript-eslint/parser"),
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
       },
-      ecmaVersion: "latest",
-      sourceType: "module",
+      globals: {
+        process: "readonly",
+        console: "readonly",
+        exports: "writable",
+        require: "readonly",
+        module: "readonly",
+      },
     },
-    ignores: ["dist/**"],
+    plugins: {
+      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+    },
     rules: {
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^(event|context)$" }],
+      "no-console": "off",
       "no-undef": "off",
     },
-  }
-);
+  },
+];

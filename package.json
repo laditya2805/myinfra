@@ -12,14 +12,15 @@
     "aws-cdk-lib": "^2.160.0",
     "constructs": "^10.3.0"
   },
-  "devDependencies": {
-    "eslint": "^8.57.0",
-    "@eslint/js": "^8.57.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0",
-    "@types/node": "^20.12.12",
-    "@types/aws-lambda": "^8.10.130"
-  }
+"devDependencies": {
+  "eslint": "^8.57.0",
+  "@eslint/js": "^8.57.0",
+  "@typescript-eslint/parser": "^7.18.0",
+  "@typescript-eslint/eslint-plugin": "^7.18.0",
+  "prettier": "^3.0.0",
+  "typescript": "^5.0.0",
+  "@types/node": "^20.12.12",
+  "@types/aws-lambda": "^8.10.130"
+}
+
 }
