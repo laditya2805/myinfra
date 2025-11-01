@@ -1,39 +1,43 @@
-
 import { S3Client, ListObjectVersionsCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { APIGatewayProxyHandler } from "aws-lambda";
 
 const s3 = new S3Client({});
-const BUCKET = process.env.BUCKET_NAME;
+const BUCKET = process.env.BUCKET_NAME as string;
 const PREFIX = "";
 
-export const handler = async (event, context) => {
- const resp = await s3.send(
-  new ListObjectVersionsCommand({
-   Bucket: BUCKET,
-   Prefix: PREFIX
-  })
- );
+export const handler: APIGatewayProxyHandler = async (event, context) => {
+  const resp = await s3.send(
+    new ListObjectVersionsCommand({
+      Bucket: BUCKET,
+      Prefix: PREFIX,
+    })
+  );
 
- const versions = resp.Versions || [];
+  const versions = resp.Versions || [];
 
- if (versions.length === 0) {
-  return {
-   statusCode: 200,
-   headers: { "Content-Type": "text/html; charset=utf-8" },
-   body: "<html><body><h1>No files found</h1></body></html>"
-  };
- }
+  if (versions.length === 0) {
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+      body: "<html><body><h1>No files found</h1></body></html>",
+    };
+  }
 
- // Sort newest-first
- versions.sort((a, b) => new Date(b.LastModified) - new Date(a.LastModified));
+  // Sort newest-first
+  versions.sort(
+    (a, b) =>
+      new Date(b.LastModified as Date).getTime() -
+      new Date(a.LastModified as Date).getTime()
+  );
 
- // The single latest across all objects
- const globalLatest = versions[0];
- const latestKey = globalLatest.Key;
- const latestVid = globalLatest.VersionId;
+  // The single latest across all objects
+  const globalLatest = versions[0];
+  const latestKey = globalLatest.Key;
+  const latestVid = globalLatest.VersionId;
 
- // Build HTML
- let html = `
+  // Build HTML
+  let html = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,31 +62,33 @@ export const handler = async (event, context) => {
  <p>All versions sorted by date (newest first)</p>
 `;
 
- // Loop through each version
- for (const v of versions) {
-  const key = v.Key;
-  const vid = v.VersionId;
-  const dt = new Date(v.LastModified).toISOString().replace("T", " ").slice(0, 16) + " UTC";
- 
-  // Only this exact version gets the badge
-  const isGlobalLatest = key === latestKey && vid === latestVid;
+  for (const v of versions) {
+    const key = v.Key!;
+    const vid = v.VersionId!;
+    const dt =
+      new Date(v.LastModified as Date)
+        .toISOString()
+        .replace("T", " ")
+        .slice(0, 16) + " UTC";
 
-  // Generate presigned URL
-  const url = await getSignedUrl(
-   s3,
-   new GetObjectCommand({
-    Bucket: BUCKET,
-    Key: key,
-    VersionId: vid
-   }),
-   { expiresIn: 7 * 24 * 60 * 60 }
-  );
- 
-  const css = isGlobalLatest ? "version-item latest" : "version-item";
-  const badge = isGlobalLatest ? <span class="badge">LATEST</span> : "";
-  const shortVid = vid && vid.length > 13 ? vid.slice(0, 10) + "..." : vid || "";
- 
-  html += `
+    const isGlobalLatest = key === latestKey && vid === latestVid;
+
+    const url = await getSignedUrl(
+      s3,
+      new GetObjectCommand({
+        Bucket: BUCKET,
+        Key: key,
+        VersionId: vid,
+      }),
+      { expiresIn: 7 * 24 * 60 * 60 }
+    );
+
+    const css = isGlobalLatest ? "version-item latest" : "version-item";
+    const badge = isGlobalLatest ? `<span class="badge">LATEST</span>` : "";
+    const shortVid =
+      vid && vid.length > 13 ? vid.slice(0, 10) + "..." : vid || "";
+
+    html += `
   <div class="${css}">
    <div class="info">
     <div class="file-name">${key}${badge}</div>
@@ -93,9 +99,9 @@ export const handler = async (event, context) => {
    </a>
   </div>
 `;
- }
+  }
 
- html += `
+  html += `
  <p style="color: gray; margin-top: 30px; text-align: center;">
  All download links are valid for 7 days
  </p>
@@ -103,9 +109,9 @@ export const handler = async (event, context) => {
 </html>
 `;
 
- return {
-  statusCode: 200,
-  headers: { "Content-Type": "text/html; charset=utf-8" },
-  body: html
- };
+  return {
+    statusCode: 200,
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+    body: html,
+  };
 };
