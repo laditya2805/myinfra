@@ -4,7 +4,7 @@
  "scripts": {
   "build": "tsc",
   "lint": "eslint lambda/**/*.ts",
-  "format": "prettier --check ."
+  "format": "prettier --write ."
 },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.650.0",
