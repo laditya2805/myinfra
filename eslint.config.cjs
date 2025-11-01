@@ -1,25 +1,21 @@
-const js = require("@eslint/js");
-const ts = require("@typescript-eslint/eslint-plugin");
-const parser = require("@typescript-eslint/parser");
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
 
-module.exports = [
+export default tseslint.config(
   js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    files: ["**/*.ts"],
-    ignores: ["dist/**", "node_modules/**"], // ✅ ignores compiled JS
     languageOptions: {
-      parser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
+      globals: {
+        ...tseslint.configs.recommended.languageOptions.globals,
+        node: true,
       },
+      ecmaVersion: "latest",
+      sourceType: "module",
     },
-    plugins: {
-      "@typescript-eslint": ts,
-    },
+    ignores: ["dist/**"],
     rules: {
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^(event|context)$" }],
-      "no-console": "off",
+      "no-undef": "off", // disable this rule because Node defines things like `require`, `exports`
     },
-  },
-];
+  }
+);
