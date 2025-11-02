@@ -44,9 +44,25 @@ export class LambdaInfraStack extends cdk.Stack {
       memorySize: 512,
     });
 
-    new lambda.CfnUrl(this, "LambdaFunctionUrl", {
+    const functionUrl = new lambda.CfnUrl(this, "LambdaFunctionUrl", {
       authType: "NONE",
       targetFunctionArn: lambdaFn.functionArn,
+    });
+
+    // Permission 1: InvokeFunctionUrl with FunctionUrlAuthType condition
+    new lambda.CfnPermission(this, "LambdaPermissionInvokeFunctionUrl", {
+      functionName: lambdaFn.functionName,
+      action: "lambda:InvokeFunctionUrl",
+      principal: "*",
+      functionUrlAuthType: "NONE",
+    });
+
+    // Permission 2: InvokeFunction with InvokedViaFunctionUrl condition
+    new lambda.CfnPermission(this, "LambdaPermissionInvokeFunction", {
+      functionName: lambdaFn.functionName,
+      action: "lambda:InvokeFunction",
+      principal: "*",
+      invokedViaFunctionUrl: true,
     });
   }
 
