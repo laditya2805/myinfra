@@ -92,10 +92,10 @@ jobs:
          ENV=${{ github.event.inputs.env }}
          if [ "$ENV" = "dev" ]; then
           aws lambda update-function-code \
-          --function-name mynodedev \
+          --function-name Emerald-on-prem-presign-dev \
           --zip-file fileb://dev.zip
          else
           aws lambda update-function-code \
-          --function-name mynodes3bucket \
-          --zip-file fileb://qa.zip
+          --function-name Emerald-on-prem-presign-qa \
+          --zip-file fileb://qa.zip 
          fi
