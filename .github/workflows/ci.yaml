@@ -72,11 +72,11 @@ jobs:
         run: |
          ENV=${{ github.event.inputs.env }}
           if [ "$ENV" = "dev" ]; then
-           cd dist/dev
-           zip -r ../../dev.zip .
+           cd dist/lambda/dev
+           zip -r ../../../dev.zip .
           else
-           cd dist/qa
-           zip -r ../../qa.zip .
+           cd dist/lambda/qa
+           zip -r ../../../qa.zip .
           fi
 
 
