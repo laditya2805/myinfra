@@ -19,22 +19,11 @@ export class LambdaInfraStack extends cdk.Stack {
         iam.ManagedPolicy.fromAwsManagedPolicyName(
           "service-role/AWSLambdaBasicExecutionRole"
         ),
+        iam.ManagedPolicy.fromAwsManagedPolicyName(
+          "AmazonS3ReadOnlyAccess"
+        ),
       ],
     });
-
-    // Add S3 permissions for presigned URL generation
-    role.addToPolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: [
-          "s3:GetObject",
-          "s3:ListBucket",
-          "s3:ListObjectVersions",
-          "s3:GetObjectVersion"
-        ],
-        resources: ["*"],
-      })
-    );
 
     const lambdaFn = new lambda.Function(this, "MyLambdaFunction", {
       functionName: `Emerald-on-prem-presign-${environment}`,
