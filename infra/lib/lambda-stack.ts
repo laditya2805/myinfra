@@ -26,7 +26,7 @@ export class LambdaInfraStack extends cdk.Stack {
     });
 
     const lambdaFn = new lambda.Function(this, "MyLambdaFunction", {
-      functionName: `Emerald-on-prem-presign-${environment}`,
+      functionName: `Emerald-on-prem-presign-s3-${environment}`,
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: "index.handler",
       code: lambda.Code.fromInline(`
@@ -64,3 +64,4 @@ export class LambdaInfraStack extends cdk.Stack {
 
 }
  
+
